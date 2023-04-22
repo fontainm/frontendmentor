@@ -19,6 +19,7 @@ export default {
 #app {
   background: hsl(0, 0%, 94%);
   min-height: 100vh;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;

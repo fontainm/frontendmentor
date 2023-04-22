@@ -105,7 +105,8 @@ export default {
   border-radius: 20px 20px 120px 20px;
   padding: 2rem;
   position: relative;
-  min-width: 480px;
+  width: 520px;
+  max-width: 100%;
 
   &__input {
     display: flex;
@@ -114,7 +115,8 @@ export default {
       display: flex;
       flex-direction: column;
       margin-right: 12px;
-      width: 120px;
+      width: 33%;
+      max-width: 100px;
 
       label {
         text-transform: uppercase;
@@ -180,6 +182,14 @@ export default {
 
     span {
       color: var(--color-primary);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 1rem;
+
+    &__output {
+      font-size: 40px;
     }
   }
 }
