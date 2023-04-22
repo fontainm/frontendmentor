@@ -15,6 +15,7 @@
               v-model="day"
               placeholder="DD"
               type="number"
+              :class="{ 'is-invalid': !!errors.length }"
               @blur="formatDay()"
             />
             <span>{{ errors[0] }}</span>
@@ -31,6 +32,7 @@
               v-model="month"
               placeholder="MM"
               type="number"
+              :class="{ 'is-invalid': !!errors.length }"
               @blur="formatMonth()"
             />
             <span>{{ errors[0] }}</span>
@@ -47,6 +49,7 @@
               v-model="year"
               placeholder="YYYY"
               type="number"
+              :class="{ 'is-invalid': !!errors.length }"
             />
             <span>{{ errors[0] }}</span>
           </ValidationProvider>
@@ -172,6 +175,10 @@ export default {
         font-weight: 700;
         margin: 6px 0;
 
+        &.is-invalid {
+          border-color: var(--color-danger);
+        }
+
         &::placeholder {
           color: var(--color-light-grey);
         }
@@ -181,6 +188,8 @@ export default {
         color: var(--color-danger);
         font-size: 10px;
         font-style: italic;
+        white-space: nowrap;
+        min-height: 15px;
       }
     }
   }
