@@ -9,8 +9,6 @@ import {
 } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 
-Vue.config.productionTip = false;
-
 // Override the default message.
 extend("required", {
   ...required,
@@ -31,7 +29,7 @@ const dateValidator = {
       case "month":
         return value >= 1 && value <= 12;
       case "year":
-        return value <= 2023;
+        return value <= new Date().getFullYear();
     }
     return false;
   },

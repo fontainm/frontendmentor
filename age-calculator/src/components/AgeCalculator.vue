@@ -1,20 +1,28 @@
 <template>
   <div class="ac">
-    <ValidationObserver v-slot="{ handleSubmit }">
+    <ValidationObserver ref="form" v-slot="{ handleSubmit }">
       <form @submit.prevent="handleSubmit(calculateAge)">
         <div class="ac__input">
           <ValidationProvider
             class="ac__input--field"
             rules="required|date:day"
+            vid="day"
             v-slot="{ errors }"
           >
             <label for="day">Day</label>
-            <input name="day" v-model="day" placeholder="DD" type="number" />
+            <input
+              name="day"
+              v-model="day"
+              placeholder="DD"
+              type="number"
+              @blur="formatDay()"
+            />
             <span>{{ errors[0] }}</span>
           </ValidationProvider>
           <ValidationProvider
             class="ac__input--field"
             rules="required|date:month"
+            vid="month"
             v-slot="{ errors }"
           >
             <label for="month">Month</label>
@@ -23,12 +31,14 @@
               v-model="month"
               placeholder="MM"
               type="number"
+              @blur="formatMonth()"
             />
             <span>{{ errors[0] }}</span>
           </ValidationProvider>
           <ValidationProvider
             rules="required|date:year"
             class="ac__input--field"
+            vid="year"
             v-slot="{ errors }"
           >
             <label for="year">Year</label>
@@ -89,11 +99,40 @@ export default {
         month: this.month - 1,
         day: this.day,
       });
+
+      if (!birthDate.isValid()) {
+        this.displayError("Must be a valid date");
+        return;
+      }
+
       let difference = moment().diff(birthDate, "ms");
+      if (difference < 0) {
+        this.displayError("Must be in the past");
+        return;
+      }
+
       let duration = moment.duration(difference);
       this.result.years = duration.years();
       this.result.months = duration.months();
       this.result.days = duration.days();
+    },
+
+    displayError(message) {
+      this.$refs.form.setErrors({
+        day: [message],
+      });
+    },
+
+    formatDay() {
+      this.day = this.makeDoubleDigits(this.day);
+    },
+
+    formatMonth() {
+      this.month = this.makeDoubleDigits(this.month);
+    },
+
+    makeDoubleDigits(value) {
+      return ("0" + value).slice(-2);
     },
   },
 };
@@ -116,7 +155,7 @@ export default {
       flex-direction: column;
       margin-right: 12px;
       width: 33%;
-      max-width: 100px;
+      max-width: 110px;
 
       label {
         text-transform: uppercase;
