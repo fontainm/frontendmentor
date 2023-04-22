@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AgeCalculator from "./components/AgeCalculator.vue";
+import AgeCalculator from "@/components/AgeCalculator.vue";
 
 export default {
   name: "App",
