@@ -3,7 +3,7 @@
     <div class="notifications__header">
       <h1>Notifications</h1>
       <div class="unread">{{ countUnread }}</div>
-      <div class="mark-as-read">Mark all as read</div>
+      <div class="mark-as-read link" @click="markAllRead">Mark all as read</div>
     </div>
     <div class="notifications__list">
       <div
@@ -15,10 +15,11 @@
         <img
           :src="`images/avatars/${notification.avatar}`"
           :alt="notification.name"
+          class="avatar"
         />
         <div>
           <div class="text">
-            <span v-text="notification.name" class="name"> </span>
+            <span v-text="notification.name" class="name link"> </span>
             <span v-html="notification.content"></span>
             <span v-if="notification.unread" class="dot">•</span>
           </div>
@@ -52,14 +53,20 @@ export default {
 
   computed: {
     countUnread() {
-      return 3;
+      return this.notifications.filter((n) => n.unread).length;
+    },
+  },
+
+  methods: {
+    markAllRead() {
+      this.notifications.map((n) => (n.unread = false));
     },
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 .notifications {
   max-width: 580px;
   margin: auto;
@@ -102,8 +109,9 @@ export default {
       font-size: 14px;
       display: flex;
       color: var(--color-dark-grayish-blue);
+      transition: background 0.3s ease;
 
-      img {
+      .avatar {
         width: 40px;
         height: 40px;
         margin-right: 1rem;
@@ -119,6 +127,10 @@ export default {
         color: var(--color-grayish-blue);
       }
 
+      .text span a {
+        font-weight: bold;
+      }
+
       .dot {
         color: var(--color-red);
         margin-left: 5px;
@@ -126,6 +138,7 @@ export default {
 
       .image {
         margin-left: auto;
+        padding-left: 0.5rem;
         width: 40px;
         height: 40px;
       }
@@ -136,11 +149,27 @@ export default {
         border: 1px solid var(--color-light-grayish-blue-1);
         border-radius: 5px;
         margin-top: 0.5rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+
+        &:hover {
+          background: var(--color-light-grayish-blue-1);
+        }
       }
 
       &.unread {
         background: var(--color-background);
       }
+    }
+  }
+
+  a,
+  .link {
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--color-blue);
     }
   }
 }
