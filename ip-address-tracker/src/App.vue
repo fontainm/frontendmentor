@@ -3,7 +3,7 @@
     <div class="header">
       <h1>IP Address Tracker</h1>
       <form @submit.prevent="submit">
-        <input type="text" v-model="formIP" :class="{ 'is-invalid': error }" />
+        <input type="text" v-model="formIP" />
         <button type="submit">›</button>
       </form>
       <div class="info">
@@ -25,6 +25,7 @@
         </div>
       </div>
     </div>
+    <div class="error" :class="{ show: error }">Invalid IP Address</div>
     <Map ref="mapComponent" />
   </div>
 </template>
@@ -64,6 +65,9 @@ export default {
       this.error = false;
       if (!this.validateIP()) {
         this.error = true;
+        setTimeout(() => {
+          this.error = false;
+        }, 3000);
         return;
       }
       this.getIPData();
@@ -122,14 +126,10 @@ export default {
     input {
       border-radius: 10px 0 0 10px;
       width: 100%;
-      border: 1px solid white;
+      border: 0;
       font-size: 18px;
       padding: 1rem 1.5rem;
       cursor: pointer;
-
-      &.is-invalid {
-        border: 1px solid red;
-      }
 
       &:focus-visible {
         outline: 0;
@@ -153,6 +153,24 @@ export default {
   }
 }
 
+.error {
+  position: absolute;
+  background: var(--danger);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 1rem;
+  border-radius: 10px 0 0 10px;
+  right: -220px;
+  top: 2rem;
+  font-size: 14px;
+  transition: right 0.3s ease;
+
+  &.show {
+    right: 0;
+  }
+}
+
 .info {
   display: flex;
   max-width: 1280px;
@@ -160,7 +178,7 @@ export default {
   background: white;
   text-align: left;
   border-radius: 10px;
-  padding: 2rem;
+  padding: 2rem 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
