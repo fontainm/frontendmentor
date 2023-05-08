@@ -55,7 +55,7 @@ export default {
   },
 
   async mounted() {
-    const response = await axios.get("http://ipinfo.io/json");
+    const response = await axios.get("https://ipinfo.io/json");
     this.inputIP = response.data.ip;
     if (this.inputIP) {
       this.getIPGeoData();
