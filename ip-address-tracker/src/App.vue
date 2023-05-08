@@ -3,25 +3,25 @@
     <div class="header">
       <h1>IP Address Tracker</h1>
       <form @submit.prevent="submit">
-        <input type="text" v-model="formIP" />
+        <input type="text" v-model="inputIP" />
         <button type="submit">›</button>
       </form>
       <div class="info">
         <div class="section">
           <h3>IP Address</h3>
-          <span>{{ ip }}</span>
+          <span>{{ output.ip }}</span>
         </div>
         <div class="section">
           <h3>Location</h3>
-          <span>{{ location }}</span>
+          <span>{{ output.location }}</span>
         </div>
         <div class="section">
           <h3>Timezone</h3>
-          <span>{{ time }}</span>
+          <span>{{ output.time }}</span>
         </div>
         <div class="section">
           <h3>ISP</h3>
-          <span>{{ isp }}</span>
+          <span>{{ output.isp }}</span>
         </div>
       </div>
     </div>
@@ -43,20 +43,22 @@ export default {
 
   data: () => {
     return {
-      formIP: "",
-      ip: "",
-      location: "",
-      time: "",
-      isp: "",
+      inputIP: "",
       error: false,
+      output: {
+        ip: "",
+        location: "",
+        time: "",
+        isp: "",
+      },
     };
   },
 
   async mounted() {
     const response = await axios.get("http://ipinfo.io/json");
-    this.formIP = response.data.ip;
-    if (this.formIP) {
-      // this.getIPGeoData();
+    this.inputIP = response.data.ip;
+    if (this.inputIP) {
+      this.getIPGeoData();
     }
   },
 
@@ -75,19 +77,19 @@ export default {
 
     validateIP() {
       return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
-        this.formIP
+        this.inputIP
       );
     },
 
     async getIPGeoData() {
       const endpoint = new URL("https://geo.ipify.org/api/v2/country,city");
       endpoint.searchParams.set("apiKey", process.env.VUE_APP_IPIFY_KEY);
-      endpoint.searchParams.set("ipAddress", this.formIP);
+      endpoint.searchParams.set("ipAddress", this.inputIP);
       const response = await axios.get(endpoint);
-      this.ip = response.data.ip;
-      this.location = `${response.data.location.postalCode} ${response.data.location.city}, ${response.data.location.region}, ${response.data.location.country}`;
-      this.time = `UTC ${response.data.location.timezone}`;
-      this.isp = response.data.isp;
+      this.output.ip = response.data.ip;
+      this.output.location = `${response.data.location.postalCode} ${response.data.location.city}, ${response.data.location.region}, ${response.data.location.country}`;
+      this.output.time = `UTC ${response.data.location.timezone}`;
+      this.output.isp = response.data.isp;
       this.$refs.mapComponent.moveMap(
         response.data.location.lat,
         response.data.location.lng
@@ -146,7 +148,7 @@ export default {
       transition: all 0.3s ease;
 
       &:hover {
-        opacity: 0.7;
+        background: var(--very-dark-gray);
       }
     }
   }
@@ -188,7 +190,7 @@ export default {
     width: 25%;
 
     &:not(:last-child) {
-      border-right: 1px solid var(--gray);
+      border-right: 1px solid var(--light-gray);
     }
 
     h3 {
