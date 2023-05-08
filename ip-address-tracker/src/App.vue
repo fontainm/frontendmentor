@@ -56,7 +56,7 @@ export default {
     const response = await axios.get("http://ipinfo.io/json");
     this.formIP = response.data.ip;
     if (this.formIP) {
-      // this.getIPData();
+      // this.getIPGeoData();
     }
   },
 
@@ -70,7 +70,7 @@ export default {
         }, 3000);
         return;
       }
-      this.getIPData();
+      this.getIPGeoData();
     },
 
     validateIP() {
@@ -79,12 +79,11 @@ export default {
       );
     },
 
-    async getIPData() {
+    async getIPGeoData() {
       const endpoint = new URL("https://geo.ipify.org/api/v2/country,city");
       endpoint.searchParams.set("apiKey", process.env.VUE_APP_IPIFY_KEY);
       endpoint.searchParams.set("ipAddress", this.formIP);
       const response = await axios.get(endpoint);
-      console.log(response);
       this.ip = response.data.ip;
       this.location = `${response.data.location.postalCode} ${response.data.location.city}, ${response.data.location.region}, ${response.data.location.country}`;
       this.time = `UTC ${response.data.location.timezone}`;
@@ -154,7 +153,7 @@ export default {
 }
 
 .error {
-  position: absolute;
+  position: fixed;
   background: var(--danger);
   color: white;
   text-transform: uppercase;
@@ -229,7 +228,6 @@ export default {
 
     .section {
       width: 100%;
-      padding: 0;
       border-right: 0 !important;
     }
   }
