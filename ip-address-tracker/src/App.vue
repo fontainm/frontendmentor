@@ -3,7 +3,7 @@
     <div class="header">
       <h1>IP Address Tracker</h1>
       <form @submit.prevent="submit">
-        <input type="text" v-model="formIP" />
+        <input type="text" v-model="formIP" :class="{ 'is-invalid': error }" />
         <button type="submit">›</button>
       </form>
       <div class="info">
@@ -47,6 +47,7 @@ export default {
       location: "",
       time: "",
       isp: "",
+      error: false,
     };
   },
 
@@ -60,12 +61,23 @@ export default {
 
   methods: {
     submit() {
+      this.error = false;
+      if (!this.validateIP()) {
+        this.error = true;
+        return;
+      }
       this.getIPData();
+    },
+
+    validateIP() {
+      return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+        this.formIP
+      );
     },
 
     async getIPData() {
       const endpoint = new URL("https://geo.ipify.org/api/v2/country,city");
-      endpoint.searchParams.set("apiKey", "at_AGgbDkYF1ZAel9gXbd6JEJdWXfZXS");
+      endpoint.searchParams.set("apiKey", process.env.VUE_APP_IPIFY_KEY);
       endpoint.searchParams.set("ipAddress", this.formIP);
       const response = await axios.get(endpoint);
       console.log(response);
@@ -110,10 +122,14 @@ export default {
     input {
       border-radius: 10px 0 0 10px;
       width: 100%;
-      border: 0;
+      border: 1px solid white;
       font-size: 18px;
       padding: 1rem 1.5rem;
       cursor: pointer;
+
+      &.is-invalid {
+        border: 1px solid red;
+      }
 
       &:focus-visible {
         outline: 0;
