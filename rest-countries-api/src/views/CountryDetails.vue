@@ -1,7 +1,10 @@
 <template>
   <div class="details">
     <router-link class="details__back" to="/"> ← Back </router-link>
-    <div v-if="country" class="details__content">
+    <div v-if="this.$store.state.loading">
+      <LoadingSpinner />
+    </div>
+    <div v-else-if="country" class="details__content">
       <div class="details__flag">
         <img :src="country.flags.svg" :alt="country.flags.alt" />
       </div>
@@ -31,7 +34,13 @@
 </template>
 
 <script>
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+
 export default {
+  components: {
+    LoadingSpinner
+  },
+
   mounted() {
     this.$store.dispatch("getCountry", this.$route.params.id);
   },
@@ -45,13 +54,13 @@ export default {
       return [
         {
           name: "Native Name",
-          value: Object.values(this.country.name.nativeName)[0].official,
+          value: Object.values(this.country.name.nativeName)[0].official
         },
         {
           name: "Population",
           value: new Intl.NumberFormat("en-GB", {
-            maximumSignificantDigits: 3,
-          }).format(this.country.population),
+            maximumSignificantDigits: 3
+          }).format(this.country.population)
         },
         { name: "Region", value: this.country.region },
         { name: "Sub Region", value: this.country.subregion },
@@ -59,21 +68,21 @@ export default {
         { name: "Top Level Domain", value: this.country.tld[0] },
         {
           name: "Currencies",
-          value: Object.values(this.country.currencies)[0].name,
+          value: Object.values(this.country.currencies)[0].name
         },
         {
           name: "Languages",
-          value: Object.values(this.country.languages).join(", "),
-        },
+          value: Object.values(this.country.languages).join(", ")
+        }
       ];
-    },
+    }
   },
 
   methods: {
     getCountry(id) {
-      return this.$store.state.countries.find((country) => country.cca3 === id);
-    },
-  },
+      return this.$store.state.countries.find(country => country.cca3 === id);
+    }
+  }
 };
 </script>
 

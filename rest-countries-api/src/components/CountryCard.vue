@@ -9,18 +9,11 @@
       />
       <div class="country__body">
         <h3>{{ country.name.common }}</h3>
-        <p>
-          <strong>Population:</strong><span>{{ country.population }}</span>
-        </p>
-        <p>
-          <strong>Region:</strong><span>{{ country.region }}</span>
-        </p>
-        <p>
-          <strong>Capital:</strong>
-          <span v-for="capital in country.capital" :key="capital">{{
-            capital
-          }}</span>
-        </p>
+        <ul>
+          <li v-for="data in countryData" :key="data.name">
+            <strong>{{ data.name }}:</strong> {{ data.value }}
+          </li>
+        </ul>
       </div>
     </router-link>
   </div>
@@ -29,9 +22,31 @@
 <script>
 export default {
   name: "CountryCard",
+
   props: {
-    country: Object
-  }
+    country: Object,
+  },
+
+  computed: {
+    countryData() {
+      return [
+        {
+          name: "Population",
+          value: new Intl.NumberFormat("en-GB", {
+            maximumSignificantDigits: 3,
+          }).format(this.country.population),
+        },
+        {
+          name: "Region",
+          value: this.country.region,
+        },
+        {
+          name: "Capital",
+          value: this.country.capital.join(", "),
+        },
+      ];
+    },
+  },
 };
 </script>
 
@@ -69,12 +84,15 @@ export default {
       margin: 0 0 0.5rem 0;
     }
 
-    p {
-      margin: 0 0 5px 0;
+    ul {
       color: var(--color-text-light);
       font-size: 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
 
-      span {
+      li {
+        margin-bottom: 0.5rem;
         font-size: 12px;
       }
 

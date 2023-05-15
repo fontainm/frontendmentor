@@ -1,16 +1,23 @@
 import { createStore } from "vuex";
 import axios from "axios";
 
+const fields =
+  "?fields=name,capital,currencies,flags,population,region,cca3,subregion,capital,tld,currencies,languages";
+
 const store = createStore({
   state() {
     return {
-      count: 0,
+      loading: false,
       countries: [],
-      country: null
+      country: null,
     };
   },
 
   mutations: {
+    setLoading(state, loading) {
+      state.loading = loading;
+    },
+
     setCountries(state, countries) {
       state.countries = countries;
     },
@@ -18,25 +25,36 @@ const store = createStore({
     setCountry(state, country) {
       state.country = country;
     },
-
-    increment(state) {
-      state.count++;
-    }
   },
 
   actions: {
     async getCountries(context) {
-      const response = await axios.get("https://restcountries.com/v3.1/all");
+      context.commit("setLoading", true);
+      const response = await axios.get(
+        "https://restcountries.com/v3.1/all" + fields
+      );
       context.commit("setCountries", response.data);
+      context.commit("setLoading", false);
     },
 
     async getCountry(context, id) {
+      context.commit("setLoading", true);
       const response = await axios.get(
-        `https://restcountries.com/v3.1/alpha/${id}`
+        `https://restcountries.com/v3.1/alpha/${id}` + fields
       );
-      context.commit("setCountry", response.data[0]);
-    }
-  }
+      context.commit("setCountry", response.data);
+      context.commit("setLoading", false);
+    },
+
+    async getCountriesFromRegion(context, region) {
+      context.commit("setLoading", true);
+      const response = await axios.get(
+        `https://restcountries.com/v3.1/region/${region}` + fields
+      );
+      context.commit("setCountries", response.data);
+      context.commit("setLoading", false);
+    },
+  },
 });
 
 export default store;

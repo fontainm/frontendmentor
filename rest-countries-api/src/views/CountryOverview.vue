@@ -8,19 +8,24 @@
         placeholder="Search for country"
       />
       <select
-        v-model="continent"
+        v-model="region"
         class="overview__input"
         placeholder="Filter by region"
+        @change="filterCountries"
       >
         <option value="" disabled selected hidden>Filter by region</option>
-        <option value="Africa">Africa</option>
-        <option value="America">America</option>
-        <option value="Asia">Asia</option>
-        <option value="Europe">Europe</option>
-        <option value="Oceania">Oceania</option>
+        <option value="africa">Africa</option>
+        <option value="america">America</option>
+        <option value="asia">Asia</option>
+        <option value="europe">Europe</option>
+        <option value="oceania">Oceania</option>
+        <option value="">Show all</option>
       </select>
     </div>
-    <div class="overview__list">
+    <div v-if="this.$store.state.loading">
+      <LoadingSpinner />
+    </div>
+    <div v-else class="overview__list">
       <CountryCard
         v-for="country in this.$store.state.countries"
         :key="country.id"
@@ -32,25 +37,37 @@
 
 <script>
 import CountryCard from "@/components/CountryCard.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default {
   name: "CountryOverview",
 
   components: {
-    CountryCard
+    CountryCard,
+    LoadingSpinner
   },
 
   data() {
     return {
       searchTerm: "",
-      continent: "",
-      countries: []
+      region: "",
+      countries: [],
     };
   },
 
   mounted() {
     this.$store.dispatch("getCountries");
-  }
+  },
+
+  methods: {
+    filterCountries() {
+      if (this.region) {
+        this.$store.dispatch("getCountriesFromRegion", this.region);
+      } else {
+        this.$store.dispatch("getCountries");
+      }
+    },
+  },
 };
 </script>
 
