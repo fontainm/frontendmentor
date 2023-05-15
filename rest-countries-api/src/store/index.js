@@ -9,7 +9,7 @@ const store = createStore({
     return {
       loading: false,
       countries: [],
-      country: null,
+      country: null
     };
   },
 
@@ -24,7 +24,7 @@ const store = createStore({
 
     setCountry(state, country) {
       state.country = country;
-    },
+    }
   },
 
   actions: {
@@ -53,8 +53,8 @@ const store = createStore({
       );
       context.commit("setCountries", response.data);
       context.commit("setLoading", false);
-    },
-  },
+    }
+  }
 });
 
 export default store;

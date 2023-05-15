@@ -24,7 +24,7 @@ export default {
   name: "CountryCard",
 
   props: {
-    country: Object,
+    country: Object
   },
 
   computed: {
@@ -33,20 +33,20 @@ export default {
         {
           name: "Population",
           value: new Intl.NumberFormat("en-GB", {
-            maximumSignificantDigits: 3,
-          }).format(this.country.population),
+            maximumSignificantDigits: 3
+          }).format(this.country.population)
         },
         {
           name: "Region",
-          value: this.country.region,
+          value: this.country.region
         },
         {
           name: "Capital",
-          value: this.country.capital.join(", "),
-        },
+          value: this.country.capital.join(", ")
+        }
       ];
-    },
-  },
+    }
+  }
 };
 </script>
 

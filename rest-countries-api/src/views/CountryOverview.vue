@@ -51,7 +51,7 @@ export default {
     return {
       searchTerm: "",
       region: "",
-      countries: [],
+      countries: []
     };
   },
 
@@ -66,8 +66,8 @@ export default {
       } else {
         this.$store.dispatch("getCountries");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
