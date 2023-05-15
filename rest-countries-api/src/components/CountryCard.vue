@@ -2,7 +2,7 @@
   <div class="country">
     <router-link :to="`/details/${country.cca2}`" class="country__card">
       <img
-        :src="country.flags.png"
+        :src="country.flags.svg"
         :alt="country.flags.alt"
         width="200"
         height="120"
@@ -47,10 +47,16 @@ export default {
     text-decoration: none;
     margin: 1rem;
     background: var(--color-bg-navbar);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-10px);
+    }
 
     img {
       height: 120px;
       width: 100%;
+      object-fit: cover;
     }
   }
 

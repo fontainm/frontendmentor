@@ -2,15 +2,10 @@
   <div class="details">
     <router-link class="details__back" to="/"> ← Back </router-link>
     <div v-if="country" class="details__content">
-      <div>
-        <img
-          :src="country.flags.png"
-          :alt="country.flags.alt"
-          width="200"
-          height="120"
-        />
+      <div class="details__flag">
+        <img :src="country.flags.svg" :alt="country.flags.alt" />
       </div>
-      <div>
+      <div class="details__info">
         <h3>{{ country.name.common }}</h3>
         <div>
           <ul>
@@ -19,11 +14,16 @@
             </li>
           </ul>
         </div>
-        <div>
-          <strong>Border countries: </strong
-          ><span v-for="borderCountry in country.borders" :key="borderCountry"
-            >{{ borderCountry }},
-          </span>
+        <div class="details__border">
+          <span><strong>Border countries: </strong></span>
+          <router-link
+            v-for="borderingCountry in borderingCountries"
+            :key="borderingCountry.id"
+            :to="`/details/${borderingCountry.id}`"
+            class="details__border-country"
+          >
+            {{ borderingCountry.name }}
+          </router-link>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      country: null
+      country: null,
     };
   },
 
@@ -44,19 +44,48 @@ export default {
     this.getCountry(this.$route.params.id);
   },
 
+  updated() {
+    this.getCountry(this.$route.params.id);
+  },
+
   computed: {
     countryData() {
       return [
-        { name: "Native Name", value: this.country.nativeName },
-        { name: "Population", value: this.country.population },
+        {
+          name: "Native Name",
+          value: Object.values(this.country.name.nativeName)[0].official,
+        },
+        {
+          name: "Population",
+          value: new Intl.NumberFormat("en-GB", {
+            maximumSignificantDigits: 3,
+          }).format(this.country.population),
+        },
         { name: "Region", value: this.country.region },
         { name: "Sub Region", value: this.country.subregion },
-        { name: "Capital", value: this.country.capital },
-        { name: "Top Level Domain", value: this.country.tld },
-        { name: "Currencies", value: this.country.currencies },
-        { name: "Languages", value: this.country.languages }
+        { name: "Capital", value: this.country.capital[0] },
+        { name: "Top Level Domain", value: this.country.tld[0] },
+        {
+          name: "Currencies",
+          value: Object.values(this.country.currencies)[0].name,
+        },
+        {
+          name: "Languages",
+          value: Object.values(this.country.languages).join(", "),
+        },
       ];
-    }
+    },
+
+    borderingCountries() {
+      let borderingCountries = [];
+      this.country.borders.map((borderingCountry) => {
+        borderingCountries.push({
+          id: borderingCountry,
+          name: "Östw",
+        });
+      });
+      return borderingCountries;
+    },
   },
 
   methods: {
@@ -65,9 +94,8 @@ export default {
         `https://restcountries.com/v3.1/alpha/${id}`
       );
       this.country = response.data[0];
-      console.log(this.country);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -80,10 +108,60 @@ export default {
     padding: 1rem 2rem;
     background: var(--color-bg-navbar);
     font-size: 12px;
+    border-radius: 3px;
   }
 
   &__content {
     display: flex;
+    margin-top: 2rem;
+  }
+
+  &__flag {
+    width: 50%;
+    margin-right: 1rem;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__info {
+    width: 50%;
+    font-size: 12px;
+
+    h3 {
+      font-size: 24px;
+      margin: 0 0 1rem 0;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      columns: 2;
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  &__border {
+    margin-top: 2rem;
+  }
+
+  &__border-country {
+    font-size: 12px;
+    box-shadow: var(--box-shadow);
+    background: var(--color-bg-navbar);
+    padding: 3px 1rem;
+    margin-right: 4px;
+    display: inline-block;
+    text-decoration: none;
   }
 }
 </style>
