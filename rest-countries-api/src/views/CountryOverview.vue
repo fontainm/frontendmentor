@@ -14,13 +14,19 @@
       >
         <option value="" disabled selected hidden>Filter by region</option>
         <option value="Africa">Africa</option>
+        <option value="America">America</option>
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+        <option value="Oceania">Oceania</option>
       </select>
     </div>
-    <CountryCard
-      v-for="country in countries"
-      :key="country.id"
-      :country="country"
-    />
+    <div class="overview__list">
+      <CountryCard
+        v-for="country in countries"
+        :key="country.id"
+        :country="country"
+      />
+    </div>
   </div>
 </template>
 
@@ -31,7 +37,7 @@ export default {
   name: "CountryOverview",
 
   components: {
-    CountryCard,
+    CountryCard
   },
 
   data() {
@@ -41,19 +47,19 @@ export default {
       countries: [
         {
           id: 0,
-          name: "Austria",
+          name: "Austria"
         },
         {
           id: 1,
-          name: "Switzerland",
+          name: "Switzerland"
         },
         {
           id: 2,
-          name: "Belgium",
-        },
-      ],
+          name: "Belgium"
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 
@@ -63,12 +69,37 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin: 1rem 0 2rem 0;
   }
 
   &__input {
-    background: var(--color-bg-header);
-    padding: 0.5rem;
+    background: var(--color-bg-navbar);
+    border: 0;
+    box-shadow: var(--box-shadow);
     font-size: 12px;
+    color: var(--color-text-light);
+    border-radius: 3px;
+    border: 1rem solid var(--color-bg-navbar);
+    width: 300px;
+
+    &:focus-visible {
+      outline: 0;
+    }
+
+    &::placeholder,
+    &:disabled {
+      color: var(--color-text-light);
+    }
+  }
+
+  select {
+    width: 140px;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }
 </style>

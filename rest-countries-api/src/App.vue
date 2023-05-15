@@ -12,13 +12,8 @@ import Header from "@/components/Header.vue";
 
 export default {
   components: {
-    Header,
-  },
-
-  mounted() {
-    let theme = localStorage.getItem("user-theme");
-    document.documentElement.className = theme;
-  },
+    Header
+  }
 };
 </script>
 
