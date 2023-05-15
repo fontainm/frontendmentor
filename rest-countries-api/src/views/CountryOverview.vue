@@ -22,7 +22,7 @@
     </div>
     <div class="overview__list">
       <CountryCard
-        v-for="country in countries"
+        v-for="country in this.$store.state.countries"
         :key="country.id"
         :country="country"
       />
@@ -32,7 +32,6 @@
 
 <script>
 import CountryCard from "@/components/CountryCard.vue";
-import axios from "axios";
 
 export default {
   name: "CountryOverview",
@@ -50,14 +49,7 @@ export default {
   },
 
   mounted() {
-    this.getCountries();
-  },
-
-  methods: {
-    async getCountries() {
-      const response = await axios.get("https://restcountries.com/v3.1/all");
-      this.countries = response.data;
-    }
+    this.$store.dispatch("getCountries");
   }
 };
 </script>

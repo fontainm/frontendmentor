@@ -17,12 +17,12 @@
         <div class="details__border">
           <span><strong>Border countries: </strong></span>
           <router-link
-            v-for="borderingCountry in borderingCountries"
+            v-for="borderingCountry in country.borders"
             :key="borderingCountry.id"
-            :to="`/details/${borderingCountry.id}`"
+            :to="`/details/${borderingCountry}`"
             class="details__border-country"
           >
-            {{ borderingCountry.name }}
+            {{ getCountry(borderingCountry)?.name.common }}
           </router-link>
         </div>
       </div>
@@ -31,24 +31,16 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
-  data() {
-    return {
-      country: null,
-    };
-  },
-
   mounted() {
-    this.getCountry(this.$route.params.id);
-  },
-
-  updated() {
-    this.getCountry(this.$route.params.id);
+    this.$store.dispatch("getCountry", this.$route.params.id);
   },
 
   computed: {
+    country() {
+      return this.$store.state.country;
+    },
+
     countryData() {
       return [
         {
@@ -75,25 +67,11 @@ export default {
         },
       ];
     },
-
-    borderingCountries() {
-      let borderingCountries = [];
-      this.country.borders.map((borderingCountry) => {
-        borderingCountries.push({
-          id: borderingCountry,
-          name: "Östw",
-        });
-      });
-      return borderingCountries;
-    },
   },
 
   methods: {
-    async getCountry(id) {
-      const response = await axios.get(
-        `https://restcountries.com/v3.1/alpha/${id}`
-      );
-      this.country = response.data[0];
+    getCountry(id) {
+      return this.$store.state.countries.find((country) => country.cca3 === id);
     },
   },
 };
@@ -159,7 +137,7 @@ export default {
     box-shadow: var(--box-shadow);
     background: var(--color-bg-navbar);
     padding: 3px 1rem;
-    margin-right: 4px;
+    margin: 0 4px 4px 0;
     display: inline-block;
     text-decoration: none;
   }

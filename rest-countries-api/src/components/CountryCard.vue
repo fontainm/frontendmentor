@@ -1,11 +1,11 @@
 <template>
   <div class="country">
-    <router-link :to="`/details/${country.cca2}`" class="country__card">
+    <router-link :to="`/details/${country.cca3}`" class="country__card">
       <img
         :src="country.flags.svg"
         :alt="country.flags.alt"
-        width="200"
-        height="120"
+        width="250"
+        height="150"
       />
       <div class="country__body">
         <h3>{{ country.name.common }}</h3>
@@ -54,7 +54,7 @@ export default {
     }
 
     img {
-      height: 120px;
+      height: 150px;
       width: 100%;
       object-fit: cover;
     }
