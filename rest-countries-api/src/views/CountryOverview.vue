@@ -32,6 +32,7 @@
 
 <script>
 import CountryCard from "@/components/CountryCard.vue";
+import axios from "axios";
 
 export default {
   name: "CountryOverview",
@@ -44,21 +45,19 @@ export default {
     return {
       searchTerm: "",
       continent: "",
-      countries: [
-        {
-          id: 0,
-          name: "Austria"
-        },
-        {
-          id: 1,
-          name: "Switzerland"
-        },
-        {
-          id: 2,
-          name: "Belgium"
-        }
-      ]
+      countries: []
     };
+  },
+
+  mounted() {
+    this.getCountries();
+  },
+
+  methods: {
+    async getCountries() {
+      const response = await axios.get("https://restcountries.com/v3.1/all");
+      this.countries = response.data;
+    }
   }
 };
 </script>
@@ -100,6 +99,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin: -1rem;
   }
 }
 </style>

@@ -2,14 +2,25 @@
   <div class="country">
     <router-link to="/details" class="country__card">
       <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/255px-Flag_of_Austria.svg.png"
-        alt=""
+        :src="country.flags.png"
+        :alt="country.flags.alt"
+        width="200"
+        height="120"
       />
       <div class="country__body">
-        <h3>{{ country.name }}</h3>
-        <p><strong>Population:</strong>1</p>
-        <p><strong>Region:</strong>1</p>
-        <p><strong>Capital:</strong>1</p>
+        <h3>{{ country.name.common }}</h3>
+        <p>
+          <strong>Population:</strong><span>{{ country.population }}</span>
+        </p>
+        <p>
+          <strong>Region:</strong><span>{{ country.region }}</span>
+        </p>
+        <p>
+          <strong>Capital:</strong>
+          <span v-for="capital in country.capital" :key="capital">{{
+            capital
+          }}</span>
+        </p>
       </div>
     </router-link>
   </div>
@@ -26,18 +37,20 @@ export default {
 
 <style scoped lang="scss">
 .country {
-  max-width: 200px;
-  background: var(--color-bg-navbar);
-  border-radius: 3px;
-  box-shadow: var(--box-shadow);
-  overflow: hidden;
+  width: 20%;
 
   &__card {
+    box-shadow: var(--box-shadow);
+    border-radius: 3px;
+    overflow: hidden;
     display: block;
     text-decoration: none;
+    margin: 1rem;
+    background: var(--color-bg-navbar);
 
     img {
       height: 120px;
+      width: 100%;
     }
   }
 
@@ -52,14 +65,43 @@ export default {
 
     p {
       margin: 0 0 5px 0;
-      font-size: 12px;
       color: var(--color-text-light);
+      font-size: 12px;
+
+      span {
+        font-size: 12px;
+      }
 
       strong {
         font-weight: 600;
         color: var(--color-text);
+        margin-right: 2px;
       }
     }
+  }
+}
+
+@media (max-width: 1199px) {
+  .country {
+    width: 25%;
+  }
+}
+
+@media (max-width: 991px) {
+  .country {
+    width: 33.3%;
+  }
+}
+
+@media (max-width: 767px) {
+  .country {
+    width: 50%;
+  }
+}
+
+@media (max-width: 575px) {
+  .country {
+    width: 100%;
   }
 }
 </style>
