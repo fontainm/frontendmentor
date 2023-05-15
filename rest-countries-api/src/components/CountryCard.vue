@@ -1,6 +1,6 @@
 <template>
   <div class="country">
-    <router-link to="/details" class="country__card">
+    <router-link :to="`/details/${country.cca2}`" class="country__card">
       <img
         :src="country.flags.png"
         :alt="country.flags.alt"

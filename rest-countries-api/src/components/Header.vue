@@ -1,7 +1,9 @@
 <template>
   <div class="header">
     <div class="header__wrapper">
-      <h1>Where in the world?</h1>
+      <router-link to="/" class="header__title"
+        >Where in the world?</router-link
+      >
       <button class="header__theme" @click="toggleTheme">
         <svg
           v-if="theme === 'dark-theme'"
@@ -56,6 +58,8 @@ export default {
 .header {
   background: var(--color-bg-navbar);
   padding: 1rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1rem;
 
   &__wrapper {
     display: flex;
@@ -65,9 +69,11 @@ export default {
     max-width: 1280px;
   }
 
-  h1 {
+  &__title {
     font-size: 18px;
     font-weight: 800;
+    text-decoration: none;
+    margin: 0;
   }
 
   &__theme {

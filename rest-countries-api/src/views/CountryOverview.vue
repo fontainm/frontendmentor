@@ -68,12 +68,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem 0 2rem 0;
+    margin: 0 0 2rem 0;
   }
 
   &__input {
     background: var(--color-bg-navbar);
-    border: 0;
     box-shadow: var(--box-shadow);
     font-size: 12px;
     color: var(--color-text-light);
